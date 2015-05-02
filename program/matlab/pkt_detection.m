@@ -16,6 +16,7 @@ for i = 1:(length(strip) - 255)
     end
 end;
 
+maxc
 assert(maxc >= THRESH_LTS_CORR);
 
 lts_ind = off;
