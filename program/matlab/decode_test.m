@@ -124,4 +124,34 @@ axis([min(x)+5 max(x)-5 -1.1*max(abs(H)) 1.1*max(abs(H))])
 title('Channel Estimates (I-Q)');
 xlabel('Subcarrier Index');
 
+
+rx_ant = rx_ant(NUM_AC * SYM_LEN + 1:end);
+
+N_OFDM_SYMS = NUM_SYM - NUM_AC;
+% Decoding
+cf = cf + 1;
+figure(cf); clf;
+tx_mod_data = repmat(tx_mod_data, 1, N_OFDM_SYMS);
+
+payload_mat = reshape(rx_ant, SYM_LEN, N_OFDM_SYMS);
+payload_mat_noCP = payload_mat(SC_OFDM,:);
+syms_f_mat = fft(payload_mat_noCP, N_SC, 1);
+syms_eq_mat = syms_f_mat./repmat((H_ant), 1, N_OFDM_SYMS);
+%syms_eq_mat = syms_f_mat(:,:,i)./repmat(H_ant_lts(:,i), 1, N_OFDM_SYMS);
+
+% Todo
+% Phase track
+% implement phaseTrack as following usage
+if (DO_PHASE_TRACK)
+    for sym_i = 1:N_OFDM_SYMS
+        syms_eq_pc_mat( :, sym_i ) = phaseTrack( syms_eq_mat( :, sym_i ), tx_mod_data(:, sym_i), cf );
+    end
+    payload_syms_mat = syms_eq_pc_mat( SC_IND_DATA,: );
+
+else
+    payload_syms_mat = syms_eq_mat(SC_IND_DATA,:);
+end
+
+signal = payload_syms_mat;
+
 pause(inf)

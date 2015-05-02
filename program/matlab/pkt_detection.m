@@ -13,6 +13,9 @@ for i = 1:(length(strip) - 255)
     if real(xc) > maxc
 	maxc = real(xc);
 	off = i - 1;
+	if maxc >= 0.99999
+	    break;
+	end
     end
 end;
 
