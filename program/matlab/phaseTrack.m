@@ -16,9 +16,7 @@ function rx_out = phaseTrack(rx_in, tx_in, cf)
     rx_out = rx_buf .* transpose(exp(-(1i * fix)));
 
     plot(rx_buf(pilot_idx),'o');
-    hold on;
     plot(rx_out(pilot_idx),'or');
-    grid on;
 
     % hint 2: the phase shift is linear!
     %         there is a matlab function called "regress"

@@ -37,10 +37,10 @@ rx = rx(SEGMENT_START:SEGMENT_START+4800 - 1);
 rx_ant = rx;
 save(['../trace/recv_signal.mat'], 'rx');
 
+hold on;
 plot(real(rx_ant).^2);
 raw_title = sprintf( 'Raw Signals %d', i );
 title(raw_title);
-hold on;
 
 [lts_ind payload_ind] = pkt_detection(rx_ant, LTS_CORR_THRESH);
 lts_ind	%display the lts you find
@@ -142,6 +142,9 @@ syms_eq_mat = syms_f_mat./repmat((H_ant), 1, N_OFDM_SYMS);
 % Todo
 % Phase track
 % implement phaseTrack as following usage
+
+hold on;
+
 if (DO_PHASE_TRACK)
     for sym_i = 1:N_OFDM_SYMS
         syms_eq_pc_mat( :, sym_i ) = phaseTrack( syms_eq_mat( :, sym_i ), tx_mod_data(:, sym_i), cf );
@@ -153,5 +156,48 @@ else
 end
 
 signal = payload_syms_mat;
+
+hold off;
+grid on;
+
+
+%{
+% Todo
+% Calculate average SNR(subcarrier, symbol) here
+% SNR = 10*log10( signal_pow./noise_pow );
+% subcarrier_SNR = ...;	%record average SNR of each subcarrier
+% SNR = ...;	%record average SNR of each symbol
+
+cf  = cf+1;
+figure(cf);
+% Plot average SNR of each subcarrier
+
+plot( [[-24:-1] [1:24]], fftshift( subcarrier_SNR ), '-bx' );
+xlabel( 'subcarrier' );
+ylabel( 'SNR(dB)' );
+title( 'Average SNR of each subcarrier' );
+
+cf  = cf+1;
+figure(cf);
+% Plot average SNR of each subcarrier
+plot( [1:50], SNR, '-bo' );
+xlabel( 'symbol' );
+ylabel( 'SNR(dB)' );
+title( 'Average SNR of each symbol' );
+
+cf  = cf+1;
+figure(cf);
+
+% Plot constellation points
+hold on;
+plot(payload_syms_mat,'r.');
+axis square; axis(1.5*[-1 1 -1 1]);
+
+plot(tx_mod_data(SC_IND_DATA,:)+0.0001i, 'bo');
+legend('Rx','Tx');
+title('Tx and Rx Constellations')
+grid on;
+hold off;
+%}
 
 pause(inf)

@@ -9,13 +9,10 @@ d_lts_t = repmat(lts_t,1,4);
 maxc = -inf;
 strip = rx_ant(32:end - 32);
 for i = 1:(length(strip) - 255)
-    [xc,lags] = xcorr(d_lts_t,strip(i:i + 255),0,'coeff');
+    xc = corr(d_lts_t,strip(i:i + 255));
     if real(xc) > maxc
 	maxc = real(xc);
 	off = i - 1;
-	if maxc >= 0.99999
-	    break;
-	end
     end
 end;
 
