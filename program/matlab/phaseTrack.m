@@ -15,7 +15,7 @@ function rx_out = phaseTrack(rx_in, tx_in, cf)
     fix = line * [(-31:32);ones(1,64)];
     rx_out = rx_buf .* transpose(exp(-(1i * fix)));
 
-    plot(rx_buf(pilot_idx),'o');
+    plot(rx_buf(pilot_idx),'ob');
     plot(rx_out(pilot_idx),'or');
 
     % hint 2: the phase shift is linear!
