@@ -159,6 +159,12 @@ grid on;
 % SNR = 10*log10( signal_pow./noise_pow );
 % subcarrier_SNR = ...;	%record average SNR of each subcarrier
 % SNR = ...;	%record average SNR of each symbol
+var_mat = -((abs(angle(signal)) > pi / 2) * 2 - 1) .* signal;
+rho = abs(1 / mean2(var_mat));
+subcarrier_var = var(var_mat.');
+subcarrier_SNR = 10 * log10(rho^2 ./ subcarrier_var);
+symbol_var = var(var_mat);
+SNR = 10 * log10(rho^2 ./ symbol_var);
 
 cf  = cf+1;
 figure(cf);
