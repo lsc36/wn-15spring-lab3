@@ -11,6 +11,8 @@ strip = rx_ant(32:end - 32);
 for i = 1:(length(strip) - 255)
     xc = corr(d_lts_t,strip(i:i + 255));
     if real(xc) > maxc
+	maxc
+	i - 1
 	maxc = real(xc);
 	off = i - 1;
     end
