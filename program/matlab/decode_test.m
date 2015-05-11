@@ -161,7 +161,7 @@ signal = payload_syms_mat;
 hold off;
 grid on;
 
-angle(signal) > angle(pi / 2)
+abs(angle(signal)) > pi / 2
 
 %{
 % Todo
