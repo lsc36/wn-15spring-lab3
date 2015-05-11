@@ -139,6 +139,7 @@ syms_eq_mat = syms_f_mat./repmat((H_ant), 1, N_OFDM_SYMS);
 % Todo
 % Phase track
 % implement phaseTrack as following usage
+hold on;
 if (DO_PHASE_TRACK)
     for sym_i = 1:N_OFDM_SYMS
         syms_eq_pc_mat( :, sym_i ) = phaseTrack( syms_eq_mat( :, sym_i ), tx_mod_data(:, sym_i), cf );
@@ -150,6 +151,8 @@ else
 end
 
 signal = payload_syms_mat;
+hold off;
+grid on;
 
 % Todo
 % Calculate average SNR(subcarrier, symbol) here
