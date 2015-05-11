@@ -34,7 +34,7 @@ figure(cf,'Position',[16,16,1600,900]);
 rx = read_complex_binary(['../trace/recv_signal.bin']);
 size(rx)
 %rx = sim();
-rx = rx(SEGMENT_START:SEGMENT_START+1000000 - 1);
+rx = rx(SEGMENT_START:SEGMENT_START+38218 - 1);
 rx_ant = rx;
 save(['../trace/recv_signal.mat'], 'rx');
 
