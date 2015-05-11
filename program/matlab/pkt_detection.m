@@ -1,5 +1,7 @@
 function [lts_ind payload_ind] = pkt_detection(rx_ant, THRESH_LTS_CORR)
 LTS_LEN = 160;
+LTS_CORR_THRESH_HI = 0.9;
+LTS_CORR_THRESH_LO = 0.6;
 
 % Long preamble (LTS) for CFO and channel estimation
 lts_f = [0 1 -1 -1 1 1 -1 1 -1 1 -1 -1 -1 -1 -1 1 1 -1 -1 1 -1 1 -1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 1 1 -1 -1 1 1 -1 1 -1 1 1 1 1 1 1 -1 -1 1 1 -1 1 -1 1 1 1 1];
@@ -8,11 +10,17 @@ lts_t = ifft(lts_f, 64);
 d_lts_t = repmat(lts_t,1,4);
 maxc = -inf;
 strip = rx_ant(32:end - 32);
+state = 0;
 for i = 1:(length(strip) - 255)
-    xc = corr(d_lts_t,strip(i:i + 255));
+    xc = corr(d_lts_t.',strip(i:i + 255));
     if real(xc) > maxc
-	maxc = real(xc);
-	off = i - 1;
+        maxc = real(xc);
+        off = i - 1;
+        if maxc > LTS_CORR_THRESH_HI
+            state = 1;
+        end
+    elseif state == 1 && real(xc) < LTS_CORR_THRESH_LO
+        break;
     end
 end;
 
