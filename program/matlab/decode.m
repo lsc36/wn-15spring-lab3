@@ -153,6 +153,8 @@ end
 signal = payload_syms_mat;
 hold off;
 grid on;
+title('phaseTrack');
+legend('before', 'after');
 
 % Todo
 % Calculate average SNR(subcarrier, symbol) here
